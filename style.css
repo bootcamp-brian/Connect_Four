@@ -1,0 +1,38 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.gameBoard {
+    display: flex;
+}
+
+ul {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+li {
+    list-style: none;
+    border: 1px solid black;
+    height: 5vw;
+    width: 5vw;
+}
+
+.arrow {
+    border: none;
+    background-color: red;
+}
+
+.arrow:hover {
+    background-color: greenyellow;
+}
+
+.loading {
+    cursor: wait;
+}
+
+.loading * {
+    pointer-events: none; 
+}
