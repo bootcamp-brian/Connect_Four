@@ -36,3 +36,16 @@ li {
 .loading * {
     pointer-events: none; 
 }
+
+.blank {
+    background: none;
+}
+.yellow {
+    background: yellow;
+}
+.red {
+    background: red;
+}
+.green {
+    background: green;
+}
