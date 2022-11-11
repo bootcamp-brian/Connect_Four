@@ -399,14 +399,14 @@ function addPiece(currentColumn) {
             if (!column[i]) {
                 arrowsEl.classList.toggle('loading');
                 animateMove([currentColumn, i]);
-                if (!gameOver) {
-                    setTimeout(() => {
+                setTimeout(() => {
+                    if (!gameOver) {
                         if (gameState.gameMode === 'singlePlayer') {
                             aiMove();
                             arrowsEl.classList.toggle('loading');
                         }
-                    }, timer)
-                }
+                    }
+                }, timer + 1000)
                 return
             }
         }
@@ -442,10 +442,8 @@ function aiMove() {
 
         if (!column[column.length]) {
             for (let j = 0; j < column.length; j++) {
-                console.log(j, column[j])
                 if (!column[j]) {
                     gameState.board[i][j] = nextPlayer;
-                    console.log([i, j], nextPlayer, check4Win([i, j], nextPlayer))
                     if (check4Win([i, j], nextPlayer)) {
                         gameState.board[i][j] = null;
                         animateMove([i, j]);
@@ -462,6 +460,7 @@ function aiMove() {
     let randomColumn = Math.floor(Math.random() * gameState.board.length);
 
     while (gameState.board[randomColumn][Number(gameState.rows)]) {
+        console.log('test')
         randomColumn = Math.floor(Math.random() * gameState.board.length);
     }
     const column = gameState.board[randomColumn];
