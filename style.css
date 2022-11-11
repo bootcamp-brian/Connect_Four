@@ -4,29 +4,258 @@
     box-sizing: border-box;
 }
 
-.gameBoard {
+body {
+    height: 100vh;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: black;
 }
 
-ul {
+form {
+    height: 75vh;
+    width: 75vw;
+    position: absolute;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: navy;
+    border-radius: 25px;
+    color: white;
+    z-index: 2;
+}
+
+#menuBar {
+    display: flex;
+    justify-content: right;
+    background: purple;
+    width: 100vw;
+    position: absolute;
+    top: 0px;
+    height: 6vmin;
+    z-index: 1;
+}
+
+#menuButton {
+    padding: 0px 15px;
+    border: none;
+    border-left: 1px solid black;
+    background: purple;
+    font-family: 'Bungee', cursive;
+    font-size: 2.5vmin;
+    color: white;
+    flex-shrink: 1;
+}
+
+#menuButton:hover {
+    background: rgb(168, 0, 168)
+}
+
+form div, #newGameButton {
+    margin: 2vmin;
+}
+
+#message {
+    font-family: 'Bungee', cursive;
+    font-size: 3.5vmin;
+    text-align: center;
+    color: black;
+    text-shadow: 0px 0px 3px white;
+}
+
+#players {
+    display: flex;
+    width: 75vw;
+    font-family: 'Bungee', cursive;
+    font-size: 5vmin;
+    justify-content: space-around;
+    flex-shrink: 1;
+}
+
+.redText {
+    color: red;
+}
+
+.yellowText {
+    color: yellow;
+}
+
+#player1Name, #player2Name {
+    height: 5vmin;
+    width: 30vw;
+    font-family: 'Bungee', cursive;
+    font-size: 3vmin;
+}
+
+#players div {
+    display: flex;
+    flex-direction: column;
+}
+
+.playerColors {
+    display: none;
+}
+
+#p1Colors, #p2Colors {
+    height: 4vmin;
+    width: 15vmin;
+    padding: 1vmin;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#p1ChooseRed, #p1ChooseYellow, #p2ChooseRed, #p2ChooseYellow {
+    height: 5vmin;
+    width: 5vmin;
+    border: 0.5vmin solid rgb(109, 108, 108);
+    border-radius: 50px;
+}
+
+#p1ChooseRed, #p2ChooseRed {
+    background: red;
+    filter: grayscale(40%);
+}
+
+#p1ChooseYellow, #p2ChooseYellow {
+    background: yellow;
+    filter: grayscale(60%);
+}
+
+#p1Red:checked + label, #p2Red:checked + label {
+    height: 5vmin;
+    width: 5vmin;
+    background-color:red;
+    border: 0.5vmin solid rgb(0, 187, 0) ;
+    filter: grayscale(0);
+}
+#p1Yellow:checked + label, #p2Yellow:checked + label {
+    height: 5vmin;
+    width: 5vmin;
+    background-color:yellow;
+    border: 0.5vmin solid rgb(0, 187, 0) ;
+    filter: grayscale(0);
+}
+
+#gameModeSelect {
+    width: 40vw;
+    display: flex;
+    justify-content: space-around;
+    font-family: 'Bungee', cursive;
+    font-size: 2.5vmin;
+    flex-shrink: 1;
+}
+
+#gameModeSelect div {
     display: flex;
     flex-direction: column-reverse;
 }
 
-li {
+#singlePlayer:checked + label, #twoPlayer:checked + label{
+    color: rgb(0, 187, 0);
+}
+
+#gameConditions {
+    display: flex;
+    width: 70vw;
+    justify-content: space-around;
+}
+
+#gameConditions label {
+    font-family: 'Bungee', cursive;
+    font-size: 2.5vmin;
+}
+
+#gameConditions input {
+    font-family: 'Bungee', cursive;
+    font-size: 2.5vmin;
+}
+
+#newGameButton {
+    font-family: Bungee, cursive;
+    font-size: 2vmin;
+    background: limegreen;
+    color: white;
+    border-style: outset;
+    border-color: lime;
+    border-radius: 25px;
+    padding: 1vmin 1vmin;
+}
+
+.p1Side, .p2Side {
+    font-family: 'Bungee', cursive;
+    padding-top: 6vmin;
+    height: 100vh;
+    position: absolute;
+}
+
+.p1Side {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    left: 4vmin;
+}
+
+.p2Side {
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    right: 4vmin;
+}
+
+#p1NameDisplay, #p2NameDisplay {
+    font-size: 4vmin;
+    color:white;
+}
+
+#gameMessage {
+    color: white;
+    font-family: 'Bungee', cursive;
+    font-size: 4vmin;
+}
+
+.gameArea {
+    background: white;
+    padding: 4vmin 8vmin;
+}
+
+.board {
+    display: flex;
+    flex-direction: column-reverse;
+    flex-wrap: wrap;
+    background: white;
+}
+
+.cell {
+    display: flex;
     list-style: none;
-    border: 1px solid black;
-    height: 5vw;
-    width: 5vw;
+    height: 8vmin;
+    width: 8vmin;
+    background-image: url(images/squareCircle.png);
+    background-size: contain;
+    justify-content: center;
+    align-items: center;
+}
+
+.arrows {
+    height: 8vmin;
+    width: 56vmin;
+    display: flex;
+    flex-wrap: wrap;
+    background: white;
+    margin-bottom: 1vmin;
 }
 
 .arrow {
     border: none;
-    background-color: red;
+    background-image: url(images/orangeArrow.gif);
 }
 
 .arrow:hover {
-    background-color: greenyellow;
+    background-image: url(images/blueArrow.gif);
 }
 
 .loading {
@@ -37,15 +266,19 @@ li {
     pointer-events: none; 
 }
 
-.blank {
-    background: none;
+.disabled {
+    pointer-events: none;
 }
+
 .yellow {
-    background: yellow;
+    background-color: yellow;
 }
 .red {
-    background: red;
+    background-color: red;
 }
 .green {
-    background: green;
+    background-color: green;
+}
+.hidden {
+    display: none;
 }
