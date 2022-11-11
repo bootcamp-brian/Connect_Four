@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Lalezar&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="menuBar">
+        <button id="menuButton">Menu</button>
+    </div>
+    <h1 id="gameMessage"></h1>
+    <form>
+        <p id="message"></p>
+        <div id="players">
+            <div>
+                <label for="player1Name" class="redText" id="p1">Player 1:</label>
+                <input type="text" name="player1Name" id="player1Name" placeholder="Enter Player 1's name">    
+                <span id="p1Colors">
+                    <input type="radio" name="p1ColorChoice" class="playerColors" id="p1Red" value="red" checked>
+                    <label for="p1Red" id="p1ChooseRed"></label>
+                    <input type="radio" name="p1ColorChoice" class="playerColors" id="p1Yellow" value="yellow">
+                    <label for="p1Yellow" id="p1ChooseYellow"></label>
+                </span>
+            </div>
+            <div>
+                <label for="player2Name" class="yellowText" id="p2">Player 2:</label>
+                <input type="text" name="player2Name" id="player2Name" placeholder="Enter Player 2's name" value="Computer" disabled>  
+                <span id="p2Colors">
+                    <input type="radio" name="p2ColorChoice" class="playerColors" id="p2Red" value="red">
+                    <label for="p2Red" id="p2ChooseRed"></label>
+                    <input type="radio" name="p2ColorChoice" class="playerColors" id="p2Yellow" value="yellow"checked>
+                    <label for="p2Yellow" id="p2ChooseYellow"></label>
+                </span>      
+            </div>
+        </div>
+        <div id="gameConditions">
+            <span>
+                <label for="columns">Columns:</label>
+                <input type="number" name="columns" id="columns" min="6" max="8" value="7">
+            </span>
+            <span>
+                <label for="rows">Rows:</label>
+                <input type="number" name="rows" id="rows" min="5" max="7" value="6">
+            </span>
+            <span>
+                <label for="winCon">How many in a row to win:</label>
+                <input type="number" name="winCon" id="winCon" min="3" max="5" value="4">
+            </span>
+        </div>
+        <div id="gameModeSelect">
+            <div>
+                <input type="radio" name="gameMode" id="singlePlayer" value="singlePlayer" checked>
+                <label for="singlePlayer">Single Player</label>
+            </div>
+            <div>
+                <input type="radio" name="gameMode" id="twoPlayer" value="twoPlayer">
+                <label for="twoPlayer">Two Player (Hotseat)</label>
+            </div>
+        </div>
+        <button id="newGameButton">New Game</button>
+    </form>
+    <div class="p1Side">
+        <h1 id="p1NameDisplay"></h1>
+    </div>
+    <div class = gameArea>
+        <div class="arrows"></div> 
+        <div class="board"></div>
+    </div>
+    <div class="p2Side">
+        <h1 id="p2NameDisplay"></h1>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
