@@ -389,7 +389,7 @@ function changeTurn() {
 }
 
     // creates an animation of a piece being dropped down a column and of a win if there is one, then changes the turn if there isn't,
-    // also stops additional pieces being placed in the meantime;
+    // also re-enables the ability to place pieces;
 function animateMove(coords) {
     timer = 0;
     const currentColumn = coords[0];
@@ -413,7 +413,9 @@ function animateMove(coords) {
         gameState.board[currentColumn][currentRow] = currentPlayer;
         renderBoard();
         const win = check4Win(coords, gameState.currentPlayer);
-        arrowsEl.classList.toggle('loading');
+        if (gameState.gameMode === 'twoPlayer') {
+            arrowsEl.classList.toggle('loading');
+        }
         if (win) {
             winFlash(win)
             gameOver = true;
@@ -424,7 +426,9 @@ function animateMove(coords) {
     }, timer)
 }
 
-    // adds a piece to the board if the move is valid and performs the appropriate actions in response;
+    // adds a piece to the board if the move is valid and performs the appropriate actions in response,
+    // such as having the computer place a piece if in singlePlayer gameMode;
+    // and prevents additional pieces being placed until finished;
 function addPiece(currentColumn) {
     const column = gameState.board[currentColumn];
 
@@ -433,14 +437,14 @@ function addPiece(currentColumn) {
             if (!column[i]) {
                 arrowsEl.classList.toggle('loading');
                 animateMove([currentColumn, i]);
-                setTimeout(() => {
-                    if (!gameOver) {
-                        if (gameState.gameMode === 'singlePlayer') {
-                            aiMove();
+                if (!gameOver && gameState.gameMode === 'singlePlayer') {
+                    setTimeout(() => {
+                        aiMove();
+                        setTimeout(() => {   
                             arrowsEl.classList.toggle('loading');
-                        }
-                    }
-                }, timer + 1000)
+                        }, timer + 1000)
+                    }, timer + 1000)
+                }
                 return
             }
         }
