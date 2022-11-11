@@ -21,11 +21,13 @@ const p1El = document.querySelector('#p1');
 const p2El = document.querySelector('#p2');
 const p1NameDisplayEl = document.querySelector('#p1NameDisplay');
 const p2NameDisplayEl = document.querySelector('#p2NameDisplay');
+const gameAreaEl = document.querySelector('.gameArea');
 
 // -----Form Interactions & Setup-----
-
+    // clears previous game data and handles the necessary setup for a new game;
 function setup(formData) {
     gameOver = false;
+    gameAreaEl.style.background = 'white';
     gameState.rows = formData.rows;
     gameState.columns = formData.columns;
     gameState.players = [formData.p1ColorChoice, formData.p2ColorChoice];
@@ -55,7 +57,7 @@ function setup(formData) {
     
     arrowsEl.classList.remove('disabled');
 }
-
+    // checks if the form submission has valid name submissions and provides a message if they aren't;
 function checkFormValid(formData) {
     if (formData.player1Name.trim() === '') {
         messageEl.textContent = 'Please enter a name for player 1';
@@ -71,6 +73,7 @@ function checkFormValid(formData) {
     return true;
 }
 
+    // toggles the colors of the "Player 1" & "Player 2" text on the menu;
 function colorChange() {
     p1El.classList.toggle('redText');
     p1El.classList.toggle('yellowText');
@@ -81,12 +84,13 @@ function colorChange() {
 // -----Event Listeners-----
 
     // -----Form Submission Event Listeners-----
-
+    // creates a formdata event when the menu form is submitted;
 formEl.addEventListener('submit', (event) => {
     event.preventDefault();
     new FormData(formEl);
 })
 
+    // takes the formdata event, extracts its data into the formData object, uses that info to setup a new game, and then hides the menu;
 formEl.addEventListener('formdata', (event) => {
     const data = event.formData
     formData = Object.fromEntries(data);
@@ -100,7 +104,7 @@ formEl.addEventListener('formdata', (event) => {
 })
 
     // -----Form Elements Event Listners-----
-
+    // These two event listeners handle toggling the input element for the player 2 name submission between enabled and disabled based on which game mode is selected;
 singlePlayerEl.addEventListener('change', () => {
     player2Name.toggleAttribute("disabled")
     player2Name.value = 'Computer';
@@ -110,6 +114,7 @@ twoPlayerEl.addEventListener('change', () => {
     player2Name.toggleAttribute("disabled")
 })
 
+    // These 4 event listeners handle the effects for when the player color choices are clicked on the menu;
 p1Red.addEventListener('change', () => {
     p2Yellow.checked = true;
     colorChange();
@@ -131,13 +136,13 @@ p2Yellow.addEventListener('change', () => {
 })
 
     // -----Menu Button Event Listener-----
-
+    // opens and closes the menu;
 menuButtonEl.addEventListener('click', () => {
     formEl.classList.toggle('hidden');
 })
 
     // -----Gameboard Arrows Event Listner-----
-
+    // triggers the addPiece function using the column of the arrow clicked as an argument;
 arrowsEl.addEventListener('click', (event)=> {
     const currentColumn = event.target.dataset.column;
 
@@ -145,7 +150,8 @@ arrowsEl.addEventListener('click', (event)=> {
 })
 
 // -----Gameboard Creation Functions-----
-
+    // creates a new board based on the given number of columns and rows and sets that as the gameState's board value,
+    // sets dimensions for appropriate elements, and renders the board;
 function createBoard(columns, rows) {
     const board = [];
 
@@ -166,6 +172,7 @@ function createBoard(columns, rows) {
     renderBoard();
 }
 
+    // clears the previous board and displays the updated one;
 function renderBoard() {
     arrowsEl.innerHTML = '';
     boardEl.innerHTML = '';
@@ -180,6 +187,7 @@ function renderBoard() {
     })
 }
 
+    // creates the cell elements of the board and gives them the appropriate class based on its corresponding spot on the gameState board array;
 function createBoardCell(columnIndex, rowIndex) {
     const cell = document.createElement('div');
 
@@ -190,6 +198,7 @@ function createBoardCell(columnIndex, rowIndex) {
     boardEl.appendChild(cell);
 }
 
+    // creates the arrow elements used to add pieces to the board;
 function createArrowCell(columnIndex) {
     const cell = document.createElement('div');
 
@@ -200,7 +209,8 @@ function createArrowCell(columnIndex) {
 }
 
 // -----Game Logic Functions-----
-
+    // takes an array of arrays of piece coordinates and a string corresponding to the current player,
+    // then compares the values of the gameState's board at the given coordinates to the string to see if they match;
 function checkPieces(pieces, currentPlayer) {
     for (let piece of pieces) {
         const columnIndex = piece[0];
@@ -212,6 +222,9 @@ function checkPieces(pieces, currentPlayer) {
     return true;
 }
 
+    // takes an array of an x and y value and a string corresponding to the current player,
+    // then checks to see if there are any winning sets of pieces that include the cell at the given coordinates,
+    // and returns an array of the coordinates of those pieces if so, otherwise returns false;
 function check4Win(coords, currentPlayer) {
     const verticalPieces = [];
     const horizontalPieces = [];
@@ -221,6 +234,8 @@ function check4Win(coords, currentPlayer) {
     const currentColumn = coords[0];
     const currentRow = coords[1];
 
+    // iterates through the given cell and the 3 spots below it and puts them in an array,
+    // then passes that array through the checkPieces function with the currentPlayer value to check for a win;
     for (let i = 0; i < winCon; i++) {
         verticalPieces.push([currentColumn, currentRow - i]);
     }
@@ -228,6 +243,10 @@ function check4Win(coords, currentPlayer) {
         return verticalPieces;
     }
 
+    // iterates through cells horizontally starting from the left based on the game's winCon,
+    // pushes them into an array until its length equals the winCon and passes it through the checkPieces to check for a win,
+    // returns that array if its a win, otherwise removes the first cell and continues iterating,
+    // repeats until it finds a win or has checked all possible sets of cells that include the cell originally provided;
     for (let i = currentColumn - (winCon - 1); i < currentColumn + winCon; i++) {
         if (i < 0) {
             i = 0;
@@ -245,6 +264,9 @@ function check4Win(coords, currentPlayer) {
         }
     }
 
+    // iterates through cells starting to the left and down based on winCon to check for a win by...
+    // using i and j to increase the x and y values respectively,
+    // and passes arrays of the appropriate length through the checkPieces function to check for wins;
     let j = currentRow - (winCon - 1);
 
     for (let i = currentColumn - (winCon - 1); i < currentColumn + winCon; i++) {
@@ -271,7 +293,12 @@ function check4Win(coords, currentPlayer) {
         }
     }
 
+    // iterates through cells starting to the left and up based on winCon to check for a win by...
+    // using i and j to decrease the x and y values respectively,
+    // and passes arrays of the appropriate length through the checkPieces function to check for wins;
+
     j = currentRow + (winCon - 1);
+    
     for (let i = currentColumn - (winCon - 1); i < currentColumn + winCon; i++) {
         if (i < 0) {
             j--;
@@ -300,6 +327,7 @@ function check4Win(coords, currentPlayer) {
     return false;
 }
 
+    // checks for a draw by seeing if all of the cells at the top have been filled;
 function check4Draw() {
     for (let i = 0; i < gameState.board.length; i++) {
         if (!(gameState.board[i][gameState.board[i].length - 1])) {
@@ -309,6 +337,7 @@ function check4Draw() {
     return true;
 }
 
+    // makes a set of cells flash green a few times to signify a win;
 function winFlash(winningCoords) {
     const savedColor = gameState.board[winningCoords[0][0]][winningCoords[0][1]];
     let counter = 0;
@@ -332,6 +361,7 @@ function winFlash(winningCoords) {
     }, 400)
 }
 
+    // checks for game ending conditions and provides the appropriate message and disables the ability to place more pieces;
 function endGame() {
     if (gameOver) {
         gameMessageEl.textContent = `${gameState.currentPlayer} Wins!`;
@@ -346,6 +376,7 @@ function endGame() {
     }
 }
 
+    // changes the player turn and provides a notification of whose turn it is;
 function changeTurn() {
     if (gameState.playerIndex === gameState.players.length - 1) {
         gameState.playerIndex = 0;
@@ -357,6 +388,8 @@ function changeTurn() {
     gameMessageEl.style.color = gameState.currentPlayer;
 }
 
+    // creates an animation of a piece being dropped down a column and of a win if there is one, then changes the turn if there isn't,
+    // also stops additional pieces being placed in the meantime;
 function animateMove(coords) {
     timer = 0;
     const currentColumn = coords[0];
@@ -391,6 +424,7 @@ function animateMove(coords) {
     }, timer)
 }
 
+    // adds a piece to the board if the move is valid and performs the appropriate actions in response;
 function addPiece(currentColumn) {
     const column = gameState.board[currentColumn];
 
@@ -414,7 +448,10 @@ function addPiece(currentColumn) {
     return false;
 }
 
+    // makes a move for the computer;
 function aiMove() {
+    // checks for a win by going through each possible move and using the check4Win function to...
+    // determine if that move would be a win, then performs that move if a win is found and stops the function;
     for (let i = 0; i < gameState.board.length; i++) {
         const column = gameState.board[i];
         
@@ -435,6 +472,7 @@ function aiMove() {
         }
     }
 
+    // checks to see if the other player will win at each possible move and blocks the first one it finds if there is one and stops the function;
     for (let i = 0; i < gameState.board.length; i++) {
         const playerIndex = Number(gameState.playerIndex);
         const nextPlayer = playerIndex === gameState.players.length - 1 ? gameState.players[0] : gameState.players[playerIndex + 1];
@@ -457,10 +495,11 @@ function aiMove() {
         }
     }
 
+    // chooses a random column, checks to make sure the column isn't filled and choose a new one until finding an unfilled column,
+    // then places a piece there;
     let randomColumn = Math.floor(Math.random() * gameState.board.length);
 
     while (gameState.board[randomColumn][Number(gameState.rows)]) {
-        console.log('test')
         randomColumn = Math.floor(Math.random() * gameState.board.length);
     }
     const column = gameState.board[randomColumn];

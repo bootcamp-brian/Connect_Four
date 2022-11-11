@@ -218,7 +218,6 @@ form div, #newGameButton {
 }
 
 .gameArea {
-    background: white;
     padding: 4vmin 8vmin;
 }
 
@@ -226,7 +225,6 @@ form div, #newGameButton {
     display: flex;
     flex-direction: column-reverse;
     flex-wrap: wrap;
-    background: white;
 }
 
 .cell {
@@ -245,7 +243,6 @@ form div, #newGameButton {
     width: 56vmin;
     display: flex;
     flex-wrap: wrap;
-    background: white;
     margin-bottom: 1vmin;
 }
 
