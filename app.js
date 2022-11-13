@@ -1,6 +1,7 @@
 const gameState = {};
 let gameOver;
 let timer;
+let loading = false;
 
 // -----DOM References-----
 
@@ -138,7 +139,9 @@ p2Yellow.addEventListener('change', () => {
     // -----Menu Button Event Listener-----
     // opens and closes the menu;
 menuButtonEl.addEventListener('click', () => {
-    formEl.classList.toggle('hidden');
+    if (!loading) {
+        formEl.classList.toggle('hidden');
+    }
 })
 
     // -----Gameboard Arrows Event Listner-----
@@ -342,6 +345,7 @@ function winFlash(winningCoords) {
     const savedColor = gameState.board[winningCoords[0][0]][winningCoords[0][1]];
     let counter = 0;
 
+    menuButtonEl.classList.add('disabled');
     const flash = setInterval(() => {
         for (let coords of winningCoords) {
             const column = coords[0];
@@ -357,6 +361,7 @@ function winFlash(winningCoords) {
         counter++;
         if (counter === 6) {
             clearInterval(flash);
+            menuButtonEl.classList.remove('disabled');
         }
     }, 400)
 }
@@ -413,15 +418,17 @@ function animateMove(coords) {
         gameState.board[currentColumn][currentRow] = currentPlayer;
         renderBoard();
         const win = check4Win(coords, gameState.currentPlayer);
-        if (gameState.gameMode === 'twoPlayer') {
-            arrowsEl.classList.toggle('loading');
-        }
         if (win) {
             winFlash(win)
             gameOver = true;
         }
         if (!endGame()) {
             changeTurn();
+        }
+        if (gameState.gameMode === 'twoPlayer') {
+            loading = false;
+            menuButtonEl.classList.remove('loading');
+            arrowsEl.classList.remove('loading');
         }
     }, timer)
 }
@@ -435,16 +442,24 @@ function addPiece(currentColumn) {
     if (!column[column.length]) {
         for (let i = 0; i < column.length; i++) {
             if (!column[i]) {
-                arrowsEl.classList.toggle('loading');
+                loading = true;
+                menuButtonEl.classList.add('loading');
+                arrowsEl.classList.add('loading');
                 animateMove([currentColumn, i]);
-                if (!gameOver && gameState.gameMode === 'singlePlayer') {
-                    setTimeout(() => {
+                setTimeout(() => {
+                    if (!gameOver && gameState.gameMode === 'singlePlayer') {
                         aiMove();
-                        setTimeout(() => {   
-                            arrowsEl.classList.toggle('loading');
-                        }, timer + 1000)
-                    }, timer + 1000)
-                }
+                        setTimeout(() => {
+                            loading = false;
+                            menuButtonEl.classList.remove('loading');
+                            arrowsEl.classList.remove('loading');
+                        }, timer)
+                    } else {
+                        loading = false;
+                        menuButtonEl.classList.remove('loading');
+                        arrowsEl.classList.remove('loading');
+                    }
+                }, timer + 1000)
                 return
             }
         }
@@ -465,6 +480,7 @@ function aiMove() {
                     gameState.board[i][j] = gameState.currentPlayer;
                     if (check4Win([i, j], gameState.currentPlayer)) {
                         gameState.board[i][j] = null;
+                        console.log(i, j)
                         animateMove([i, j]);
                         return;
                     } else {
@@ -488,6 +504,7 @@ function aiMove() {
                     gameState.board[i][j] = nextPlayer;
                     if (check4Win([i, j], nextPlayer)) {
                         gameState.board[i][j] = null;
+                        console.log(i, j)
                         animateMove([i, j]);
                         return;
                     } else {
@@ -503,13 +520,15 @@ function aiMove() {
     // then places a piece there;
     let randomColumn = Math.floor(Math.random() * gameState.board.length);
 
-    while (gameState.board[randomColumn][Number(gameState.rows)]) {
+    while (gameState.board[randomColumn][Number(gameState.rows) - 1]) {
         randomColumn = Math.floor(Math.random() * gameState.board.length);
     }
     const column = gameState.board[randomColumn];
 
+    console.log(randomColumn)
     for (let i = 0; i < column.length; i++) {
         if (!column[i]) {
+            console.log(randomColumn, i)
             animateMove([randomColumn, i]);
             return;
         }
